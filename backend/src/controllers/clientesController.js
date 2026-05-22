@@ -8,7 +8,7 @@ const obtenerClientes = async(req, res) => {
         `;
         res.json(result.recordset);
     }catch(error){
-        console.log(error);
+        console.log(error);         
         res.status(500).json({
             mensaje: 'ERROR NO SE PUDO OBTENER CLIENTES!!'
         })
@@ -40,7 +40,7 @@ const actualizarCliente = async(req, res) =>{
     try{
         const {id} = req.params;
         const {
-            nombres, apellidos, telefono, direccion, correo
+            nombres, apellidos,     telefono, direccion, correo
         } = req.body;
         await sql.query`
             UPDATE Clientes

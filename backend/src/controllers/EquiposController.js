@@ -2,7 +2,17 @@ const {sql} = require('../config/db');
 const obtenerEquipos= async(req, res)=>{
     try{
         const result = await sql.query`
-            SELECT * FROM Equipos
+            SELECT 
+                Equipos.idEquipo,
+                Equipos.marca,
+                Equipos.modelo,
+                Equipos.imei,
+                Equipos.problema, 
+                Clientes.nombres
+            
+             FROM Equipos
+            INNER JOIN Clientes
+            ON Equipos.idCliente = Clientes.idCliente
         `;
         res.json(result.recordset);
     }catch(error){
