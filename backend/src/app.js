@@ -4,13 +4,16 @@ require('dotenv').config();
 
 const { connectDB } = require('./config/db')
 const ClienteRouters = require('./routers/clientesRouters');
+const TecnicoRouters = require('./routers/tecnicoRouters');
 const EquipoRouters = require('./routers/equiposRouters');
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 app.use('/api/clientes', ClienteRouters);
-app.use('/api/equipos', EquipoRouters)
+app.use('/api/tecnicos', TecnicoRouters);
+app.use('/api/equipos', EquipoRouters);
+
 
 const PORT = process.env.PORT || 3000;
 connectDB();

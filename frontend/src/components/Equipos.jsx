@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { actualizarEquipo } from "../../../backend/src/controllers/EquiposController";
 
 function Equipos(){
 
     const [equipos, setEquipos] = useState([]);
     const [clientes, setClientes] = useState([]);
-
+    const [editar, setEditar] = useState(false);
+    const [idEquipo, setIdEquipo] = useState(null);
     const [formData, setFormData] = useState({
         marca:'',
         modelo:'',
@@ -66,17 +68,34 @@ function Equipos(){
             obtenerEquipos();
 
             setFormData({
-                marca:'',
-                modelo:'',
-                imei:'',
-                problema:'',
-                idCliente:''
+                marca: equipos.marca,
+                modelo: equipos.modelo,
+                imei: equipos.imei,
+                problema: equipos.problema,
+                idCliente: equipos.idCliente
             });
+            setEditar(true);
+            setIdEquipo(equipos.idEquipo);
 
         }catch(error){
             console.log(error);
         }
     };
+    const eliminarEquipo = async(id)=>{
+        const confirmar = confirm('ELIMINAR EQUIPO');
+        if(!confirmar){
+            return;
+        }
+        try{
+            await axios.delete(
+                `http://localhost:3000/api/equipos/${id}`
+            );
+            alert('EQUIPO ELIMINADO');
+            obtenerEquipos();
+        }catch(error){
+            console.log(error);
+        }
+    }
 
     return(
         <div>
@@ -169,6 +188,7 @@ function Equipos(){
                             <th>IMEI</th>
                             <th>Problema</th>
                             <th>Cliente</th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
 
@@ -184,6 +204,14 @@ function Equipos(){
                                     <td>{equipo.imei}</td>
                                     <td>{equipo.problema}</td>
                                     <td>{equipo.nombres}</td>
+                                    <td>
+                                        <button className="btn btn-warning btn-sm me-2" onClick={()=>{actualizarEquipo(equipo)}}>
+                                            Editar
+                                        </button>
+                                        <button className="btn btn-danger btn-sm" onClick={()=>{eliminarEquipo(equipo.idEquipo)}}>
+                                            Eliminar
+                                        </button>
+                                    </td>
 
                                 </tr>
                             ))

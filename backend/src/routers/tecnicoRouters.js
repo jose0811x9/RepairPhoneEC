@@ -6,6 +6,6 @@ const {
 }= require('../controllers/TecnicosController');
 router.get('/', obtenerTecnicos)
 router.post('/', crearTecnico)
-router.put('/', actualizarTecnico)
-router.delete('/', eliminarTecnico)
+router.put('/:id', actualizarTecnico)
+router.delete('/:id', eliminarTecnico)
 module.exports= router;

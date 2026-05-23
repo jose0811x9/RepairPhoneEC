@@ -1,4 +1,4 @@
-const { act } = require("react");
+
 const {sql}= require("../config/db");
 
 const obtenerTecnicos= async(req, res)=>{
@@ -22,7 +22,7 @@ const crearTecnico = async(req, res)=>{
         await sql.query`
             INSERT INTO Tecnicos
             (nombres, especialidad, telefono)
-            VALUE
+            VALUES
             (${nombres}, ${especialidad},${telefono})   
         `;
         res.json({mensaje: 'TECNICO REGISTRADO'});
@@ -44,10 +44,10 @@ const actualizarTecnico= async(req, res)=>{
             SET
                 nombres = ${nombres},
                 especialidad = ${especialidad},
-                telefono = ${especialidad}
+                telefono = ${telefono}
             WHERE idTecnico = ${id}
         `;
-        res.json({ mensaje: 'CLIENTE ACTUALIZADO'});
+        res.json({ mensaje: 'TECNICO ACTUALIZADO'});
     }catch(error){
         console.log(error);
         res.status(500).json({
@@ -62,7 +62,7 @@ const eliminarTecnico = async(req, res)=>{
             DELETE FROM Tecnicos
             WHERE idTecnico =${id}
         `;
-        res.json({mensaje:'CLIENTE ELIMINADO'});
+        res.json({mensaje:'TECNICO ELIMINADO'});
    }catch(error){
         console.log(error);
         res.status(500).json({
