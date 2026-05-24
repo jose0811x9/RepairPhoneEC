@@ -134,7 +134,9 @@ function Cliente(){
             onChange={handleChange}
             
            />
-           <button className="btn btn-primary">Guardar</button>
+           <button className="btn btn-primary">
+            {editar? 'Actualizar':'Guardar'}
+            </button>
         </form>
       </div>
       <div className="card p-4">

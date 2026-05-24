@@ -51,7 +51,7 @@ function Tecnico(){
         }
         try{
             await axios.delete(
-                `http://localhost:3000/api/tecnicos/${id}`
+                    
             );
             alert('TECNICO ELIMINADO');
             obtenerTecnico();
@@ -103,7 +103,9 @@ function Tecnico(){
                         onChange={handleChange}
                         required
                     />
-                    <button className="btn btn-primary">Guardar</button>
+                    <button className="btn btn-primary">
+                        {editar? 'Actualizar':'Guardar'}
+                    </button>
                 </form>
             </div>
             <div className="card p-4">

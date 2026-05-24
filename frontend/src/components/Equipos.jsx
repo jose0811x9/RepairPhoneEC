@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { actualizarEquipo } from "../../../backend/src/controllers/EquiposController";
+
 
 function Equipos(){
 
@@ -55,31 +55,34 @@ function Equipos(){
 
     const guardarEquipo = async(e)=>{
         e.preventDefault();
-
         try{
-
-            await axios.post(
-                'http://localhost:3000/api/equipos',
-                formData
-            );
-
-            alert('EQUIPO REGISTRADO');
-
+            if(editar){
+                await axios.put(
+                    `http://localhost:3000/api/equipos/${idEquipo}`,
+                    formData
+                );
+                alert('EQUIPO ACTUALIZADO');
+            }else{
+                await axios.post(
+                    'http://localhost:3000/api/equipos',
+                    formData
+                );
+                alert('EQUIPO REGISTRADO');
+            }
             obtenerEquipos();
-
             setFormData({
-                marca: equipos.marca,
-                modelo: equipos.modelo,
-                imei: equipos.imei,
-                problema: equipos.problema,
-                idCliente: equipos.idCliente
+                marca:'',
+                modelo:'',
+                imei:'',
+                problema:'',
+                idCliente:''
             });
-            setEditar(true);
-            setIdEquipo(equipos.idEquipo);
-
+            setEditar(false),
+            setIdEquipo(null)
         }catch(error){
             console.log(error);
         }
+
     };
     const eliminarEquipo = async(id)=>{
         const confirmar = confirm('ELIMINAR EQUIPO');
@@ -95,7 +98,18 @@ function Equipos(){
         }catch(error){
             console.log(error);
         }
-    }
+    };
+    const editarEquipo = (equipo)=>{
+        setFormData({
+            marca: equipo.marca,
+            modelo:equipo.modelo,
+            imei: equipo.imei,
+            problema: equipo.problema,
+            idCliente: equipo.idCliente
+        });
+        setEditar(true);
+        setIdEquipo(equipo.idEquipo);
+    };
 
     return(
         <div>
@@ -167,7 +181,7 @@ function Equipos(){
                     </select>
 
                     <button className="btn btn-success">
-                        Guardar
+                       {editar? 'Actualizar':'Guardar'}
                     </button>
 
                 </form>
@@ -205,7 +219,7 @@ function Equipos(){
                                     <td>{equipo.problema}</td>
                                     <td>{equipo.nombres}</td>
                                     <td>
-                                        <button className="btn btn-warning btn-sm me-2" onClick={()=>{actualizarEquipo(equipo)}}>
+                                        <button className="btn btn-warning btn-sm me-2" onClick={()=>{editarEquipo(equipo)}}>
                                             Editar
                                         </button>
                                         <button className="btn btn-danger btn-sm" onClick={()=>{eliminarEquipo(equipo.idEquipo)}}>
