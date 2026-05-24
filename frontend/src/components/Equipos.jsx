@@ -5,6 +5,7 @@ import axios from "axios";
 function Equipos(){
 
     const [equipos, setEquipos] = useState([]);
+    const [busqueda, setBusqueda] = useState('')
     const [clientes, setClientes] = useState([]);
     const [editar, setEditar] = useState(false);
     const [idEquipo, setIdEquipo] = useState(null);
@@ -187,7 +188,12 @@ function Equipos(){
                 </form>
 
             </div>
-
+            <input 
+                type="text"
+                className="form-control mb-3"
+                placeholder="Buscar por marca, modelo o IMEI"
+                value={busqueda}
+                onChange={(e)=>setBusqueda(e.target.value)} />
             <div className="card p-4">
 
                 <h3>Lista de Equipos</h3>
@@ -209,7 +215,13 @@ function Equipos(){
                     <tbody>
 
                         {
-                            equipos.map((equipo)=>(
+                            equipos
+                            .filter((equipo)=>
+                                equipo.marca.toLowerCase().includes(busqueda.toLowerCase())||
+                                equipo.modelo.toLowerCase().includes(busqueda.toLowerCase())||
+                                equipo.imei.toLowerCase().includes(busqueda.toLowerCase())
+                            )
+                            .map((equipo)=>(
                                 <tr key={equipo.idEquipo}>
 
                                     <td>{equipo.idEquipo}</td>
