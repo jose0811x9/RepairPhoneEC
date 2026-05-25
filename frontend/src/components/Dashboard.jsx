@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 function Dashboard(){
@@ -27,9 +27,10 @@ function Dashboard(){
         }
     };
     return(
-        <div className="container mt-4">
-            <h2>BIENVENIDO {usuario?.nombre}</h2>
+        <div className="container mt-4">    
             <h2 className="mb-4">Dashboard</h2>
+            <h5>Bienvenido, {usuario?.nombre}</h5>
+            
             <p className="text-muted">
                 Sistema de gestión para reparación de teléfonos móviles.
             </p>
@@ -59,7 +60,7 @@ function Dashboard(){
                     </div>
                 </div>
                 <div className="col-md-3">
-                    <div className="card text-center bg-danger text white">
+                    <div className="card text-center bg-danger text-white">
                         <div className="card-body">
                             <h5>Reparaciones</h5>
                             <h2>{totalReparaciones}</h2>

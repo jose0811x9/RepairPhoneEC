@@ -3,10 +3,9 @@ import axios from "axios";
 import {useNavigate} from "react-router-dom";
 
 function Login(){
-    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         correo : '',
-        contraseña: ''
+        contrasena: ''
     });
     const handleChange = (e)=>{
         setFormData({
@@ -15,15 +14,24 @@ function Login(){
     };
     const iniciarSesion= async(e)=>{
         e.preventDefault();
+        if(!formData.correo || !formData.contrasena){
+                alert('complete los campos')
+                return;
+            } 
         try{
             const response = await axios.post('http://localhost:3000/api/login',formData);
+               
             localStorage.setItem(
                 'usuario',JSON.stringify(response.data)
             );
             alert('Bienvenido');
-            navigate('/dashboard');
+            window.location.href = '/dashboard';
         }catch(error){
-            alert('DATOS INCORRECTO');
+            if(error.response){
+                alert(error.response.data.mensaje);
+            }else{
+                alert('ERROR DEL SISTEMA');
+            } 
             console.log(error);
         }
     };
@@ -37,18 +45,21 @@ function Login(){
                     name="correo" 
                     placeholder="Correo"
                     className="form-control mb-3"
+                    value={formData.correo}
                     onChange={handleChange} 
                     />
                     <input 
                     type="password" 
-                    name="contraseña" 
+                    name="contrasena" 
                     placeholder="Contraseña"
                     className="form-control mb-3"
+                    value={formData.contrasena}
                     onChange={handleChange} 
                     />
                     <button className="btn btn-primary">
                         Ingresar
                     </button>
+                    
                 </form>
             </div>
         </div>

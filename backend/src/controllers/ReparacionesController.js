@@ -20,10 +20,40 @@ const obtenerReparaciones = async(req, res)=>{
             INNER JOIN EstadoReparaciones on Reparaciones.idEstado = EstadoReparaciones.idEstado    
         `;
         res.json(result.recordset);
+        
     }catch(error){
         console.log(error);
         res.status(500).json({
             mensaje:'ERROR NO SE PUDO OBTENER REPARACIONES'
+        });
+    }
+};
+const obtenerMisReparaciones = async(req, res)=>{
+    try{
+        const {idUsuario} = req.params;
+        const result = await sql.query`
+            SELECT
+                r.idReparacion,
+                r.fechaIngreso,
+                    r.observaciones,
+                r.costoManoObra,
+                e.marca,
+                e.modelo,
+                e.imei,
+                er.nombreEstado, 
+                t.nombres AS tecnico
+            FROM Reparaciones r
+            INNER JOIN Equipos e ON r.idEquipo = e.idEquipo
+            INNER JOIN Clientes c ON e.idCliente = c.idCliente
+            INNER JOIN EstadoReparaciones er ON r.idEstado = er.idEstado
+            INNER JOIN Tecnicos t ON r.idTecnico = t.idTecnico
+            WHERE c.idUsuario = ${idUsuario}
+        `;
+        res.json(result.recordset);
+    }catch(error){
+        console.log(error);
+        res.status(500).json({
+            mensaje: 'NO SE PUDO OBTENER REPARACIONES'
         });
     }
 };
@@ -76,7 +106,7 @@ const actualizarReparacion = async(req, res)=>{
     }catch(error){
         console.log(error);
         res.status(500).json({
-            mensaje:'ERROR NO SE PUDO ACTUALIZAR'
+           mensaje:'ERROR NO SE PUDO ACTUALIZAR'
         });
     }
 };
@@ -96,6 +126,7 @@ const eliminarReparacion = async(req, res)=>{
             mensaje:'ERROR NO SE PUDO ELIMINAR'
         })
     }
+    
 }
 
-module.exports= {obtenerReparaciones, crearReparaciones, actualizarReparacion, eliminarReparacion};  
+module.exports= {obtenerReparaciones, obtenerMisReparaciones, crearReparaciones, actualizarReparacion, eliminarReparacion};  
