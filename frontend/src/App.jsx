@@ -8,7 +8,10 @@ import Tecnico from './components/tecnico';
 import Reparaciones from './components/Reparaciones';
 import Dashboard from './components/Dashboard';
 import Login from './components/Login';
-
+import ConsultarReparacion from './components/ConsultarReparacion';
+import Repuestos from './components/Repuestos';
+import DetalleRepuesto from './components/DetalleRepuesto';
+import Factura from './components/Factura';
 
 function App(){
   const [usuario, setUsuario] = useState(null);
@@ -30,6 +33,9 @@ function App(){
             <Link to="/reservar-cita" className='btn btn-info me-2'>
                 Reservar Citas
             </Link>
+            <Link to="/consultar-reparacion" className='btn btn-success me-2'>
+              Consultar Reparación
+            </Link>
           </div>
           )}
           {usuario &&(
@@ -46,6 +52,9 @@ function App(){
                 </Link>
                 <Link to="/equipos" className='btn btn-success me-2'>
                   Equipos
+                </Link>
+                <Link to="/repuestos" className='btn btn-info me-2'>
+                  Repuestos
                 </Link>
                 </>
               )}
@@ -71,10 +80,12 @@ function App(){
               <Route path='/reservar-cita' element={<ReservarCita/>}/>
               <Route path='/tecnico' element={usuario?.nombreRol === 'Administrador'? <Tecnico/>: <Login/>}/>
               <Route path='/equipos' element={usuario?.nombreRol === 'Administrador'? <Equipos/>: <Login/>}/>
+              <Route path='/repuestos' element={usuario?.nombreRol === 'Administrador'?<Repuestos/>: <Login/>}/>
               <Route path='/reparaciones' element={usuario && (usuario?.nombreRol === 'Administrador' || usuario?.nombreRol == 'Tecnico')? <Reparaciones/>: <Login/>}/>
+              <Route path='/detalle-repuesto/:idReparacion' element={usuario && (usuario?.nombreRol === 'Administrador'|| usuario?.nombreRol === 'Tecnico' )?<DetalleRepuesto />:<Login/>}/>
               <Route path='/citas' element={usuario && (usuario?.nombreRol === 'Administrador' || usuario?.nombreRol == 'Tecnico')? <Citas/>: <Login/>}/>
-              
-              
+              <Route path='/consultar-reparacion' element={<ConsultarReparacion/>}/>
+              <Route path='/factura/:idReparacion' element={usuario &&(usuario?.nombreRol === 'Administrador' || usuario?.nombreRol === 'Tecnico')?<Factura/>: <Login/>}/>
           </Routes>
       </div>
     </BrowserRouter>

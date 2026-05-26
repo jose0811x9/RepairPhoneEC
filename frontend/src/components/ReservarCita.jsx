@@ -35,7 +35,7 @@ function ReservarCita(){
 
         }catch(error){
             console.log(error);
-            alert('NO SE PUDO REGISTRAR LA CITA');
+            alert(error.response?.data?.mensaje ||'NO SE PUDO REGISTRAR LA CITA');
         }
     };
     return(

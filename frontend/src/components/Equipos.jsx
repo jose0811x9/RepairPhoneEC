@@ -81,7 +81,12 @@ function Equipos(){
             setEditar(false),
             setIdEquipo(null)
         }catch(error){
-            console.log(error);
+            //console.log(error);
+            const mensaje = error.response?.data?.mensaje;
+            console.log("STATUS:", error.response?.status);
+            console.log("MENSAJE:", mensaje);
+            alert(mensaje || "Error desconocido");
+        
         }
 
     };
@@ -100,14 +105,15 @@ function Equipos(){
             console.log(error);
         }
     };
-    const editarEquipo = (equipo)=>{
+    const editarEquipo = (equipo) => {
         setFormData({
-            marca: equipo.marca,
-            modelo:equipo.modelo,
-            imei: equipo.imei,
-            problema: equipo.problema,
-            idCliente: equipo.idCliente
+            marca: equipo.marca || '',
+            modelo: equipo.modelo || '',
+            imei: equipo.imei || '',
+            problema: equipo.problema || '',
+            idCliente: equipo.idCliente ? String(equipo.idCliente) : ''
         });
+
         setEditar(true);
         setIdEquipo(equipo.idEquipo);
     };

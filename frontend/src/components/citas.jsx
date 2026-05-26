@@ -36,6 +36,22 @@ function Citas(){
             alert('NO SE PUDO ELIMINAR');
         }
     };
+    const atenterCita = async(id)=>{
+        const confirmar = confirm(
+            'DESEAS ATENDER ESTA CITA?'
+        );
+        if(!confirmar){
+            return;
+        }
+        try{
+            await axios.put(`http://localhost:3000/api/citas/atender/${id}`);
+            alert('CITA ATENDIDA');
+            obtenerCitas();
+        }catch(error){
+            console.log(error);
+            alert('NOSE PUDO AGENDAR LA CITA');
+        }
+    };
     return(
         <div className="container mt-4">
             <div className="card p-4 shadow">
@@ -50,6 +66,7 @@ function Citas(){
                             <th>Problema</th>
                             <th>Fecha</th>
                             <th>Hora</th>
+                            <th>Estado</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -62,13 +79,16 @@ function Citas(){
                                 <td>{cita.modelo}</td>
                                 <td>{cita.problema}</td>
                                 <td>{new Date(cita.fecha).toLocaleDateString()}</td>
-                                <td>{new Date(cita.hora).toLocaleTimeString([],{
-                                        hour:'2-digit',
-                                        minute:'2-digit'
-                                        })
-                                    }
-                                </td>
                                 <td>
+                                    {String(cita.hora).substring(11,16)}
+                                </td>
+                                <td>Estado</td>
+                                <td>
+                                    {cita.estado !== 'Atendida' && (
+                                        <button className="btn btn-success btn-sm me-2" onClick={()=>atenterCita(cita.idCita)}>
+                                            Atender
+                                        </button>
+                                    )}
                                     <button className="btn btn-danger btn-sm" onClick={()=>eliminarCitas(cita.idCita)}>
                                         Eliminar
                                     </button> 

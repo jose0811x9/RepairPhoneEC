@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 function Reparaciones(){
+    const navigate = useNavigate();
     const [reparaciones, setReparaciones]= useState([]);
+    const [busqueda, setBusqueda] = useState('');
     const[equipos, setEquipos]= useState([]);
     const[tecnicos, setTecnicos]= useState([]);
     const[editar, setEditar]= useState(false);
@@ -114,7 +117,7 @@ function Reparaciones(){
     };
     return(
         <div>
-            <div className="card p-4 mb-4">
+            <div className="card p-4 mb-4 shadow">
                 <h3>Registrar Reparaciones</h3>
                 <form onSubmit={guardarReparacion}>
                     <input 
@@ -196,11 +199,36 @@ function Reparaciones(){
                     <button className="btn btn-primary">
                         {editar ? 'Actualizar' : 'Guardar'}
                     </button>
+                    {editar && (
+                        <button
+                            type="button" className="btn btn-secondary ms-2" onClick={()=>{
+                                setEditar(false);
+                                setIdReparacion(null);
+                                setFormData({
+                                    fechaIngreso:'',
+                                    observaciones:'',
+                                    costoManoObra:'',
+                                    idEquipo:'',
+                                    idTecnico:'',
+                                    idEstado:1
+                                });
+                            }}
+                        >
+                            Cancelar
+                        </button>
+                    )}
                 </form>
             </div>
-            <div className="card p-4">
+            <input
+                type="text"
+                className="form-control mb-3"
+                placeholder="Buscar por equipo, técnico o estado"
+                value={busqueda}
+                onChange={(e)=>setBusqueda(e.target.value)}
+            />
+            <div className="card p-4 shadow">
                 <h3>Lista de reparaciones</h3>
-                <table className="table">
+                <table className="table table-bordered table-hover">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -215,8 +243,19 @@ function Reparaciones(){
                         </tr>
                     </thead>
                     <tbody>
-                        {
-                            reparaciones.map((reparacion)=>(
+                        {reparaciones.filter((reparacion)=>`${reparacion.marca} ${reparacion.modelo}`
+                            .toLowerCase()
+                            .includes(busqueda.toLowerCase()) ||
+
+                        (reparacion.tecnico || '')
+                            .toLowerCase()
+                            .includes(busqueda.toLowerCase()) ||
+
+                        reparacion.nombreEstado
+                            .toLowerCase()
+                            .includes(busqueda.toLowerCase())
+                        )
+                                .map((reparacion)=>(
                                 <tr key={reparacion.idReparacion}>
                                     <td>{reparacion.idReparacion}</td>
                                     <td>{new Date(reparacion.fechaIngreso).toLocaleDateString()}</td>
@@ -238,15 +277,33 @@ function Reparaciones(){
                                             {reparacion.nombreEstado}
                                         </span>
                                     </td>
-                                    <td>${reparacion.costoManoObra}</td>
                                     <td>
-                                        <button className="btn btn-warning btn-sm me-2" onClick={()=>editarReparacion(reparacion)}>
-                                            Editar
-                                        </button>
-                                    
-                                        <button className="btn btn-danger btn-sm" onClick={()=>eliminarReparacion(reparacion.idReparacion)}>
-                                            Eliminar
-                                        </button>
+                                        <div>
+                                            mano obra: {' '} ${parseFloat(reparacion.costoManoObra).toFixed(2)}
+                                        </div>
+                                        <div>
+                                            Repuesto: {' '} ${parseFloat(reparacion.totalRepuestos).toFixed(2)}
+                                        </div>
+                                        <strong>
+                                            Total: {' '} ${parseFloat(reparacion.totalGeneral).toFixed(2)}
+                                        </strong>
+                                    </td>
+                                    <td>
+                                        <div className="d-flex flex-wrap gap-2">
+                                            <button className="btn btn-warning btn-sm" onClick={() => editarReparacion(reparacion)}>
+                                                Editar
+                                            </button>
+                                            <button className="btn btn-danger btn-sm" onClick={() => eliminarReparacion(reparacion.idReparacion)}>
+                                                Eliminar
+                                            </button>
+                                            <button className="btn btn-info btn-sm" onClick={() => navigate(`/detalle-repuesto/${reparacion.idReparacion}`)}>
+                                                Repuestos
+                                            </button>
+                                            <button className="btn btn-success btn-sm" onClick={() => navigate(`/factura/${reparacion.idReparacion}`)}>
+                                                Factura
+                                            </button>
+
+                                        </div>
                                     </td>
                                 </tr>
                             ))

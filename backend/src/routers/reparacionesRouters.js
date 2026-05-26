@@ -6,11 +6,11 @@ const {
     crearReparaciones,
     actualizarReparacion,
     eliminarReparacion,
-    obtenerMisReparaciones
+    consultarReparacion
 } = require('../controllers/ReparacionesController');
 
 router.get('/', obtenerReparaciones);
-router.get('/misreparaciones/:idUsuario', obtenerMisReparaciones)
+router.get('/consultar/:imei', consultarReparacion);
 router.post('/', crearReparaciones);
 router.put('/:id', actualizarReparacion);
 router.delete('/:id', eliminarReparacion);

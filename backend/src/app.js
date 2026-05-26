@@ -9,6 +9,9 @@ const CitasRouters = require('./routers/CitasRouter')
 const TecnicoRouters = require('./routers/tecnicoRouters');
 const EquipoRouters = require('./routers/equiposRouters');
 const ReparacionesRouters = require('./routers/reparacionesRouters');
+const RepuestoRouters = require('./routers/RepuestosRoutes');
+const DetalleRepuesto = require('./routers/DetalleRepuestoRoutes');
+const FacturasRouters = require('./routers/FacturasRoutes');
 const app = express();
 
 app.use(cors());
@@ -19,7 +22,9 @@ app.use('/api/citas', CitasRouters);
 app.use('/api/tecnicos', TecnicoRouters);
 app.use('/api/equipos', EquipoRouters);
 app.use('/api/reparaciones', ReparacionesRouters);
-
+app.use('/api/detalle-repuesto', DetalleRepuesto);
+app.use('/api/repuestos', RepuestoRouters);
+app.use('/api/facturas',FacturasRouters);
 
 
 const PORT = process.env.PORT || 3000;
